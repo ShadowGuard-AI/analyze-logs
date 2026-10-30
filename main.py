@@ -2,6 +2,7 @@ import argparse
 import logging
 import pandas as pd
 import re  # For regex-based pattern matching
+import sys
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -19,7 +20,7 @@ def setup_argparse():
     parser.add_argument("-l", "--limit", type=int, help="Limit the number of log entries to process (optional).", required=False)
     parser.add_argument("--ip_address", help="Extract and analyze IP addresses.", action="store_true", required=False)
     parser.add_argument("--error_codes", help="Extract and analyze error codes.", action="store_true", required=False)
-    parser.add_argument("--user_agents", help="Extract and analyze User-Agent strings.", action="store_true", required=False) #offensive
+    parser.add_argument("--user_agents", help="Extract and analyze User-Agent strings.", action="store_true", required=False)
     
     return parser.parse_args()
 
@@ -58,6 +59,10 @@ def analyze_log_file(log_file, pattern=None, limit=None, ip_address=False, error
                 else:
                     entry["pattern_match"] = None
 
+            # Each extractor below uses re.search, so a line contributes at
+            # most one value per field: a line naming two IPs reports the
+            # first. That keeps the output at one row per log line, which
+            # is the shape the CSV consumers of this tool expect.
             if ip_address:
                 ip_match = re.search(r'\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b', line)
                 if ip_match:
@@ -85,8 +90,13 @@ def analyze_log_file(log_file, pattern=None, limit=None, ip_address=False, error
         return df
 
     except FileNotFoundError:
+        # Not swallowed here: an empty frame from a missing file looks the
+        # same as one from a file with no matches, and main needs to tell
+        # those apart to set the exit code.
         logging.error(f"Log file not found: {log_file}")
-        return pd.DataFrame()
+        raise
+    except re.error:
+        raise
     except Exception as e:
         logging.error(f"An error occurred during log analysis: {e}")
         return pd.DataFrame()
@@ -98,20 +108,13 @@ def main():
     """
     args = setup_argparse()
 
-    # Input validation: Check if the log file is a string
-    if not isinstance(args.log_file, str):
-        logging.error("Invalid log file path. Please provide a string.")
-        return
-
-    # Input validation: Check if the output file is a string (if provided)
-    if args.output and not isinstance(args.output, str):
-        logging.error("Invalid output file path. Please provide a string.")
-        return
-
-    # Input validation: Check if the limit is a positive integer (if provided)
-    if args.limit is not None and (not isinstance(args.limit, int) or args.limit <= 0):
+    # argparse already guarantees the argument types, so the isinstance
+    # checks that used to sit here could never fire. The one check that
+    # matters is the limit value: 0 would be falsy downstream and would
+    # silently mean "no limit" instead of what the user asked for.
+    if args.limit is not None and args.limit <= 0:
         logging.error("Invalid limit value. Please provide a positive integer.")
-        return
+        sys.exit(1)
 
 
     try:
@@ -126,14 +129,14 @@ def main():
         else:
              logging.warning("No data to display/save.  Check log file or parameters.")
 
+    except FileNotFoundError:
+        sys.exit(1)
+    except re.error as e:
+        logging.error(f"Invalid regex pattern: {e}")
+        sys.exit(1)
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
-    # Example Usage:
-    # 1. Analyze a log file and print the results: python main.py mylog.txt
-    # 2. Analyze a log file, searching for a pattern, and save to CSV: python main.py mylog.txt -p "error" -o error_log.csv
-    # 3. Analyze a log file, limit to 100 lines, and extract IP addresses: python main.py mylog.txt -l 100 --ip_address
-    # 4. Analyze a log file for error codes: python main.py mylog.txt --error_codes
-    # 5. Analyze a log file for user agents: python main.py mylog.txt --user_agents
     main()
