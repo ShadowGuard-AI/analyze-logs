@@ -38,7 +38,7 @@ def analyze_log_file(log_file, pattern=None, limit=None, ip_address=False, error
         user_agents (bool, optional): Extract user agents. Defaults to False.
     
     Returns:
-        pandas.DataFrame: A DataFrame containing the analysis results. Returns an empty DataFrame if an error occurs.
+        pandas.DataFrame: A DataFrame containing the analysis results. Read and decode errors are re-raised so the caller can exit non-zero.
     """
     try:
         with open(log_file, "r", encoding="utf-8") as f:  # Explicit encoding for wider compatibility
@@ -98,8 +98,12 @@ def analyze_log_file(log_file, pattern=None, limit=None, ip_address=False, error
     except re.error:
         raise
     except Exception as e:
+        # Re-raised for the same reason as FileNotFoundError above: an
+        # empty frame from a file that could not be read or decoded
+        # looks the same as one from a file with no matches, and main
+        # needs to tell those apart to set the exit code.
         logging.error(f"An error occurred during log analysis: {e}")
-        return pd.DataFrame()
+        raise
 
 
 def main():
