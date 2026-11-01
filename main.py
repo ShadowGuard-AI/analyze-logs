@@ -44,6 +44,10 @@ def analyze_log_file(log_file, pattern=None, limit=None, ip_address=False, error
         with open(log_file, "r", encoding="utf-8") as f:  # Explicit encoding for wider compatibility
             lines = f.readlines()
 
+        # The limit cuts the file's first lines, before any pattern or
+        # extractor runs. It is not a limit on matches: a limit of 100
+        # with a pattern that only matches at line 5000 reports no
+        # matches at all, and that surprises everyone the first time.
         if limit:
             lines = lines[:limit]
 
@@ -78,6 +82,13 @@ def analyze_log_file(log_file, pattern=None, limit=None, ip_address=False, error
                     entry["error_code"] = None
             
             if user_agents:
+                # The .+ runs to the end of the line, so in a combined
+                # log line anything written after the agent string, a
+                # trailing status or referer field, is captured as part
+                # of the agent. The error code pattern just above has
+                # the opposite narrowness: only the literal word ERROR
+                # followed by digits counts, so HTTP status codes in an
+                # access log are never extracted as error codes.
                 user_agent_match = re.search(r'User-Agent:\s*(.+)', line)
                 if user_agent_match:
                     entry["user_agent"] = user_agent_match.group(1)
@@ -131,6 +142,10 @@ def main():
             else:
                 print(df.to_string()) # Print to console if no output file is specified.
         else:
+             # An empty result still exits 0. A log with no matching
+             # lines and a log that was empty to start with both land
+             # here, and this warning is the only difference from a run
+             # that produced a report.
              logging.warning("No data to display/save.  Check log file or parameters.")
 
     except FileNotFoundError:
