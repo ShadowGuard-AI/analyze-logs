@@ -3,83 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>analyze-logs: Ghost Light of the Sunken Bell</title>
-<meta name="description" content="analyze-logs will parse and analyze log files for patterns. Focused on data analysis and reporting.">
+<title>analyze-logs: The Searched Line</title>
 <style>
-@font-face{font-family:'Coming Soon';src:url('fonts/ComingSoon.ttf') format('truetype');}
-@font-face{font-family:'Alegreya Sans';src:url('fonts/AlegreyaSans.ttf') format('truetype');}
-:root{--iron:#101613;--kelp:#345e44;--sand:#d8c69e;--sand2:#e9dcbc;--red:#b22c24}
-*{box-sizing:border-box}body{margin:0;background:var(--iron);color:#e6e0cc;font-family:'Alegreya Sans',sans-serif;line-height:1.65}
-h1,h2{font-family:'Coming Soon',sans-serif}
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:2rem 6vw;max-width:1100px;margin:0 auto}
-.hero img.banner{width:100%;border:3px solid var(--kelp)}
-.logo{width:160px}
-.chainwrap{position:relative;max-width:1100px;margin:0 auto;padding:0 6vw 3rem}
-.chainwrap:before{content:'';position:absolute;left:calc(6vw - 26px);top:0;bottom:0;width:14px;background:repeating-linear-gradient(180deg,transparent 0 6px,var(--sand) 6px 9px,transparent 9px 26px);opacity:.55}
-main{padding:0}
-nav{display:flex;gap:.8rem;flex-wrap:wrap;margin:1.2rem 0}
-.slate{display:inline-block;text-decoration:none;background:var(--iron);border:2px solid var(--kelp);padding:.32rem;transition:transform .15s}
-.slate span{display:block;background:var(--sand);color:var(--iron);font-family:'Coming Soon',sans-serif;padding:.55rem 1.2rem;text-align:center}
-.slate:hover span{background:#f4ecd4}
-.slate:active{transform:perspective(300px) rotateX(7deg);transform-origin:top}
-.slate:focus-visible{outline:3px solid var(--red);outline-offset:3px}
-.barrel{background:var(--sand);color:var(--iron);border-top:16px solid var(--iron);border-bottom:16px solid var(--iron);outline:2px solid var(--kelp);padding:.6rem 1.5rem 1.2rem;margin:1.8rem 0;background-image:repeating-linear-gradient(90deg,transparent 0 64px,rgba(16,22,19,.14) 64px 67px)}
-.barrel h2{border-bottom:2px solid var(--kelp);padding-bottom:.3rem}
-pre{background:var(--iron);color:var(--sand2);padding:1rem;overflow-x:auto}
-code{background:rgba(52,94,68,.22);padding:0 .25em}pre code{background:none;padding:0}
-a{color:#a8d5ae}
-a.feather{position:relative;padding-left:1.2em}
-a.feather:before{content:'';position:absolute;left:2px;top:.18em;width:.5em;height:.95em;background:#e9e6da;border-radius:100% 0 100% 0;transform:rotate(14deg);transition:transform .15s}
-a.feather:hover:before{transform:rotate(14deg) translateY(-3px);box-shadow:inset -2px -6px 0 var(--red)}
-.slate:before,a.slate:before{content:none}
-.linkrow{display:flex;align-items:flex-start;gap:.9rem;margin:.7rem 0}
-.linkball{flex:0 0 auto;width:26px;height:38px;border:4px solid var(--iron);border-radius:50%;margin-top:.1rem}
-.blank{opacity:.72}
-footer{padding:1rem 6vw 2.4rem;max-width:1100px;margin:0 auto}
+@font-face { font-family: 'Squada One'; src: url('fonts/SquadaOne-400.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Titillium Web'; src: url('fonts/TitilliumWeb-400.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Titillium Web'; src: url('fonts/TitilliumWeb-700.woff2') format('woff2'); font-weight: 700; }
+:root { --sand: #e6ddc8; --coil: #1d1d1f; --sea: #5f7263; --brass: #a87f2d; --paper: #f7f4ec; --ink: #23241f; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Titillium Web', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+header.top { display: flex; justify-content: space-between; align-items: center; padding: 16px 28px; background: var(--coil); color: var(--sand); border-bottom: 5px solid var(--brass); }
+.wordmark { font-family: 'Squada One', sans-serif; letter-spacing: .04em; }
+.find { color: #dcc488; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; }
+.hero { text-align: center; padding: 50px 22px 8px; }
+.hero img.logo { width: 180px; height: auto; border: 5px solid var(--coil); border-radius: 50%; }
+h1 { font-family: 'Squada One', sans-serif; font-weight: 400; font-size: 2.5rem; margin: 18px 0 6px; color: var(--sea); }
+h2 { font-family: 'Squada One', sans-serif; font-weight: 400; color: var(--sea); border-bottom: 3px solid var(--sand); padding-bottom: 5px; margin-top: 38px; }
+.tag { max-width: 43rem; margin: 0 auto; }
+.buttons { margin: 22px 0 6px; }
+.buttons a { display: inline-block; margin: 4px; padding: 11px 22px; background: var(--sea); color: #fff; font-weight: 700; text-decoration: none; border-radius: 4px; }
+.buttons a.alt { background: transparent; color: var(--coil); border: 2px solid var(--coil); }
+figure.wide { max-width: 1020px; margin: 24px auto; padding: 0 18px; }
+figure.wide img { width: 100%; height: auto; display: block; border: 1px solid var(--sand); }
+figcaption { color: #6f6a5c; font-size: .9rem; padding-top: 8px; text-align: center; }
+.strip { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; padding: 20px 18px; }
+.strip div { background: #fff; border: 1px solid var(--sand); border-top: 4px solid var(--brass); padding: 13px 18px; min-width: 180px; text-align: center; }
+.strip b { display: block; font-family: 'Squada One', sans-serif; font-weight: 400; color: var(--sea); font-size: 1.05rem; }
+main { max-width: 880px; margin: 0 auto; padding: 8px 22px 30px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid var(--sand); padding: 8px 12px; text-align: left; vertical-align: top; }
+th { background: var(--coil); color: var(--sand); }
+code { background: #eae2cb; padding: 1px 6px; border-radius: 3px; }
+.hold { border-left: 5px solid var(--brass); background: #f2ecd8; padding: 13px 18px; }
+footer { text-align: center; padding: 24px 18px 32px; color: #6f6a5c; font-size: .9rem; border-top: 5px solid var(--brass); margin-top: 28px; }
 </style>
 </head>
 <body>
-<header class="hero">
-<img class="logo" src="assets/logo.png" alt="A church bell resting on a harbor floor, its mouth tipped toward the viewer, a signal red seam on its shoulder and a chain trailing from its crown">
-<img class="banner" src="assets/intro-banner.png" alt="The harbor floor alone: sand, gull feathers, shells, tarred barrels, a rope coil, and the great bell resting on its sand bank under green water, with nothing that can be read">
-<h1>analyze-logs</h1>
-<p>A dive down a mooring chain. Each section is shackled to the chain line in the left margin as the page descends.</p>
-<nav>
-<a class="slate" href="#controls"><span>Search by Pattern</span></a>
-<a class="slate" href="#controls"><span>IP Addresses</span></a>
-<a class="slate" href="#controls"><span>Error Codes</span></a>
-<a class="slate" href="#controls"><span>User-Agent Strings</span></a>
-<a class="slate" href="#floor"><span>No Description Provided</span></a>
-</nav>
-</header>
-<div class="chainwrap">
-<main>
-<section class="barrel" id="purpose"><h2>First depth: what the tool is for</h2>
-<p>analyze-logs will parse and analyze log files for patterns, and its own subtitle places it under data analysis and reporting. That is the entire purpose claim the README makes.</p>
-<p>Note at the foot of this panel: no log format, no example file, and no description of what a pattern result looks like is given in the source.</p>
+<header class="top"><span class="wordmark">analyze-logs</span><span class="find">Sweep, stop, dig</span></header>
+<section class="hero">
+<img class="logo" src="assets/logo.png" alt="Black metal detector coil from directly above resting flat on pale rippled sand, its cable curving away out of frame and one small brass coin lying beside the coil in the loosened sand">
+<h1>The Searched Line</h1>
+<p class="tag">Parse and analyze log files for patterns. A detectorist sweeps a wide field of sand in slow arcs, listening for the few specific things buried in it; this tool sweeps a log file the same way, searching for the pattern it is given and lifting out the addresses, error codes, and agents it is asked for.</p>
+<p class="buttons"><a href="https://github.com/ShadowGuard-AI/analyze-logs">View on GitHub</a> <a class="alt" href="https://github.com/ShadowGuard-AI/analyze-logs#readme">Read the README</a></p>
 </section>
-<section class="barrel" id="getting"><h2>Second depth: getting down to the work</h2>
-<pre><code>git clone https://github.com/ShadowStrikeHQ/analyze-logs
-./analyze-logs [params]</code></pre>
-<p>Slate note: the usage line names no log file argument although the tool is described as parsing log files, and no step after cloning is documented. A visitor needs to know both silences before trying the tool.</p>
-</section>
-<section class="barrel" id="controls"><h2>Third depth: the controls, link by link</h2>
-<div class="linkrow"><span class="linkball"></span><p><code>-h</code> shows a help message and exits.</p></div>
-<div class="linkrow"><span class="linkball"></span><p><code>-p</code> takes a regex pattern to search for in the log file.</p></div>
-<div class="linkrow"><span class="linkball"></span><p><code>--ip_address</code> extracts and analyzes IP addresses.</p></div>
-<div class="linkrow"><span class="linkball"></span><p><code>--error_codes</code> extracts and analyzes error codes.</p></div>
-<div class="linkrow"><span class="linkball"></span><p><code>--user_agents</code> extracts and analyzes User-Agent strings.</p></div>
-<div class="linkrow blank"><span class="linkball"></span><p><code>-o</code>: No Description Provided in the source.</p></div>
-<div class="linkrow blank"><span class="linkball"></span><p><code>-l</code>: No Description Provided in the source.</p></div>
-<p>Those two links are left visibly blank apart from their labels. This page invents no output file or log level meaning for them, however plausible either guess would be.</p>
-<p><a class="feather" href="https://github.com/ShadowGuard-AI/analyze-logs">The repository on GitHub</a></p>
-</section>
-<section class="barrel" id="floor"><h2>Fourth depth: the floor, where the honest limits sit</h2>
-<p>The README gives no sample input, no sample output, no count of what is extracted, and no account of how the three extraction modes report their findings. Those absences are findings in their own right: a reader leaves knowing the five documented controls that do have meanings, and knowing equally clearly which two controls and which outcomes remain undescribed.</p>
-<p>Licence, the last shackle on the chain: Copyright (c) ShadowStrikeHQ, with no licence named, printed as written.</p>
-</section>
-</main>
+<figure class="wide"><img src="assets/intro-banner.png" alt="Detector coil close up stopped over one spot in the sand as a hand brushes the surface clear and the edge of a brass coin shows in the loosened grains"><figcaption>The coil stopped over one spot, a hand brushing the surface clear over the find.</figcaption></figure>
+<div class="strip">
+<div><b>Regex search</b>with the -p pattern</div>
+<div><b>IP addresses</b>extracted and analyzed</div>
+<div><b>Error codes</b>extracted and analyzed</div>
+<div><b>User-Agent strings</b>extracted and analyzed</div>
 </div>
-<footer><p>Theme: Ghost Light of the Sunken Bell. Type: Coming Soon for headings under Apache-2.0, Alegreya Sans for reading under SIL Open Font License 1.1. Lettering reference Ledlight was reference only and is not embedded.</p></footer>
+<main>
+<h2>What it does</h2>
+<p>The tool parses a log file and searches it: a regular expression pattern to hunt for, and three extraction switches that pull out and analyze IP addresses, error codes, and User-Agent strings. Usage, as the README gives it: <code>./analyze-logs [params]</code>. Its one requirement is <code>pandas&gt;=2.1.0</code>.</p>
+<figure class="wide" style="padding:0;margin:18px 0;"><img src="assets/banner.png" alt="Wide pale beach at low tide with one detectorist sweeping a black coil in slow arcs along a single searched line in the wet sand, the grey green sea flat behind and a digging trowel standing where the line began"></figure>
+<h2>Parameters</h2>
+<table>
+<tr><th>Parameter</th><th>What the README says</th></tr>
+<tr><td><code>-h</code></td><td>Show help message and exit</td></tr>
+<tr><td><code>-p</code></td><td>Regex pattern to search for in the log file</td></tr>
+<tr><td><code>-o</code></td><td>No description provided</td></tr>
+<tr><td><code>-l</code></td><td>No description provided</td></tr>
+<tr><td><code>--ip_address</code></td><td>Extract and analyze IP addresses</td></tr>
+<tr><td><code>--error_codes</code></td><td>Extract and analyze error codes</td></tr>
+<tr><td><code>--user_agents</code></td><td>Extract and analyze User-Agent strings</td></tr>
+</table>
+<h2>Stated limits</h2>
+<div class="hold"><p>Two stretches of this beach are unmarked in the source, and they stay unmarked here: <code>-o</code> and <code>-l</code> arrive with no description provided in the source, and the usage line names no log file to parse. Both gaps are left as gaps, with nothing invented to fill them. The licence line at the close of the README is a copyright line only, with no licence named.</p></div>
+</main>
+<footer>analyze-logs, swept and lifted. Fonts: Squada One and Titillium Web, self-hosted under the SIL Open Font License.</footer>
 </body>
 </html>
