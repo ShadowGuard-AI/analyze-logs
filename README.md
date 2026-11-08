@@ -1,13 +1,12 @@
-![The harbor floor alone: sand rippled by current, gull feathers, shells, tarred barrels, a rope coil, and the great bell resting on its sand bank under green water, with nothing that can be read](intro-banner.png)
+![Detector coil close up stopped over one spot in the sand as a hand brushes the surface clear and the edge of a brass coin shows in the loosened grains](intro-banner.png)
 
 # analyze-logs
 
-Ghost Light of the Sunken Bell: an event preserved after the moment that produced it has gone quiet.
+![Wide pale beach at low tide with one detectorist sweeping a black coil in slow arcs along a single searched line in the wet sand, the grey green sea flat behind and a digging trowel standing where the line began](banner.png)
 
-![Harbor floor at dusk with the sunken bell in the right foreground, the project name chalked in Coming Soon on a slate hung from the chain at the bell crown](banner.png)
+<p align="center"><img src="logo.png" alt="Black metal detector coil from directly above resting flat on pale rippled sand, its cable curving away out of frame and one small brass coin lying beside the coil in the loosened sand" width="180"></p>
 
 ![Harbor floor scene: surface light brightens and dims while a lamp highlight visits the bell crown, a barrel hoop, and the rope coil, and two feathers stir at the lower edge](scene.svg)
-
 
 # analyze-logs
 Parse and analyze log files for patterns - Focused on Data analysis and reporting
