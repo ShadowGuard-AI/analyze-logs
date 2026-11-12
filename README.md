@@ -7,9 +7,7 @@
 <p align="center"><img src="logo.png" alt="Black metal detector coil from directly above resting flat on pale rippled sand, its cable curving away out of frame and one small brass coin lying beside the coil in the loosened sand" width="180"></p>
 
 ![Harbor floor scene: surface light brightens and dims while a lamp highlight visits the bell crown, a barrel hoop, and the rope coil, and two feathers stir at the lower edge](scene.svg)
-
-# analyze-logs
-Parse and analyze log files for patterns - Focused on Data analysis and reporting
+Parse and analyze log files for patterns, focusing on automated data analysis and reporting
 
 
 ![Major section divider: a chain run of nine links with one signal red link at the right hand end](sep-heavy.svg)
